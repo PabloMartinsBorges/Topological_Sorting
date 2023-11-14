@@ -19,14 +19,14 @@ public class CriarRegistro {
 		url = endereco;
 	}
 
-    public void RegistrarTempo(int nGrafos, double tempoNano, double tempoSeg) {
+    public void RegistrarTempo(int nVertices, double tempoNano, double tempoSeg) {
         CriarArquivo(url);
 
         try {
             List<String> existentes = LinhaExistentes(url);
             String coluna = "Numero de Grafos" + ";" + "Tempo Medio (nano) "+ ";" + "Tempo Medio (seg) "+ ";";
             existentes.add(coluna);
-            String registro = nGrafos + ";" + tempoNano + ";" + tempoSeg + ";";
+            String registro = nVertices + ";" + tempoNano + ";" + tempoSeg + ";";
             existentes.add(registro);
             // adicionar no csv
             String todasLinhas = UnicaLinha(existentes);
@@ -40,14 +40,14 @@ public class CriarRegistro {
     }
     
     
-    public void RegistrarTempo(int nGrafos, double tempo) {
+    public void RegistrarTempo(int nVertices, double tempo) {
         CriarArquivo(url);
 
         try {
             List<String> existentes = LinhaExistentes(url);
             String coluna = "Numero de Grafos" + ";" + "Tempo"+ ";";
             existentes.add(coluna);
-            String registro = nGrafos + ";" + tempo + ";";
+            String registro = nVertices + ";" + tempo + ";";
             existentes.add(registro);
             // adicionar no csv
             String todasLinhas = UnicaLinha(existentes);
