@@ -11,7 +11,7 @@ public class CriarRegistro {
 	private String url;
 	
 	public CriarRegistro() {
-		url = "registroCluster.csv";
+		url = "registroTopological.csv";
 	}
 	
 	public CriarRegistro(String endereco) {
@@ -19,14 +19,14 @@ public class CriarRegistro {
 		url = endereco;
 	}
 
-    public void RegistrarTempo(int nPontos, int limite, double tempoNano, double tempoSeg) {
+    public void RegistrarTempo(int nGrafos, double tempoNano, double tempoSeg) {
         CriarArquivo(url);
 
         try {
             List<String> existentes = LinhaExistentes(url);
-            String coluna = "Numero de Pontos" + ";" + "Tamanho Maximo "+ ";" + "Tempo Medio (nano) "+ ";" + "Tempo Medio (seg) "+ ";";
+            String coluna = "Numero de Grafos" + ";" + "Tempo Medio (nano) "+ ";" + "Tempo Medio (seg) "+ ";";
             existentes.add(coluna);
-            String registro = nPontos + ";" + limite + ";" + tempoNano + ";" + tempoSeg + ";";
+            String registro = nGrafos + ";" + tempoNano + ";" + tempoSeg + ";";
             existentes.add(registro);
             // adicionar no csv
             String todasLinhas = UnicaLinha(existentes);
@@ -40,14 +40,14 @@ public class CriarRegistro {
     }
     
     
-    public void RegistrarTempo(int nPontos, int limite, double tempo) {
+    public void RegistrarTempo(int nGrafos, double tempo) {
         CriarArquivo(url);
 
         try {
             List<String> existentes = LinhaExistentes(url);
-            String coluna = "Numero de Pontos" + ";" + "Tamanho Maximo "+ ";" + "Tempo"+ ";";
+            String coluna = "Numero de Grafos" + ";" + "Tempo"+ ";";
             existentes.add(coluna);
-            String registro = nPontos + ";" + limite + ";" + tempo + ";";
+            String registro = nGrafos + ";" + tempo + ";";
             existentes.add(registro);
             // adicionar no csv
             String todasLinhas = UnicaLinha(existentes);
