@@ -135,8 +135,9 @@ public class OrdenacaoTopologica
 				p = p.prox;
 			}
 			p.prox = q;
-			this.n++;
+
 		}
+		this.n++;
 	}
 
 	public boolean remove(int elem)
@@ -205,14 +206,12 @@ public class OrdenacaoTopologica
         Elo p = prim;
         Elo q = new Elo();
         prim = null;
-		n = 0;
         while(p != null){
             q = p;
             p = q.prox;
             if(q.contador == 0){
                 q.prox = prim;
                 prim = q;
-				n++;
             }
         }
     }
@@ -221,8 +220,8 @@ public class OrdenacaoTopologica
 		Elo q = prim;
 		while (q != null){
 			System.out.print(q.chave + " ");
-			n--;
 			EloSuc t = q.listaSuc;
+			n--;
 			while (t != null){
 				t.id.contador--;
 				if(t.id.contador == 0){
@@ -251,7 +250,6 @@ public class OrdenacaoTopologica
 				p = p.prox;
 			}
 			p.prox = q;
-			this.n++;
 		}
 	}
 
@@ -281,12 +279,17 @@ public class OrdenacaoTopologica
 	/* Método responsável por executar o algoritmo. */
 	public boolean executa()
 	{
-
 		debug();
 		gerarListaSemPredecessores();
 		debug();
 		gerarSequenciaDeSaida();
-//		debug();
+		if(n != 0){
+			System.out.println(n);
+			return false;
+		}
+		debug();
+
+
 
 		return true;
 	}

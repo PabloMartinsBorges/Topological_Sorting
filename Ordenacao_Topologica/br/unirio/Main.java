@@ -13,8 +13,8 @@ public class Main
 //		GrafoRandomico grafoRandomico = new GrafoRandomico(5);
 
 		if(ord.executa())
-			System.out.println("O conjunto nao é parcialmente ordenado.");
-		else
 			System.out.println("O conjunto é parcialmente ordenado.");
+		else
+			System.out.println("O conjunto não é parcialmente ordenado.");
 	}
 }
