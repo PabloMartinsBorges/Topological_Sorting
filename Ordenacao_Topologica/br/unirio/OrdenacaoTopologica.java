@@ -56,15 +56,34 @@ public class OrdenacaoTopologica
 		}
 
 		public void insereInicio(Elo elemento){
-			if(id == null){
-				id = elemento;
-			}
-			else{
-				EloSuc eloTemp = new EloSuc();
-				eloTemp.id = id;
-				this.prox = eloTemp;
-				id = elemento;
-			}
+            if (id != null) {
+                EloSuc eloTemp = new EloSuc();
+                eloTemp.id = id;
+                this.prox = eloTemp;
+            }
+            id = elemento;
+        }
+		public EloSuc remove(EloSuc eloSuc, int elem )
+		{
+
+			EloSuc p;
+			EloSuc ant = null;
+
+			for( p = eloSuc; ((p.id != null) && (p.id.chave != elem)); p = p.prox)
+				ant = p;
+
+
+			if (p.id == null)
+				return null;
+
+			if (p.id == eloSuc.id)
+				eloSuc = p.prox;
+			else
+				ant.prox = p.prox;
+
+
+
+			return eloSuc;
 		}
 	}
 
@@ -96,17 +115,13 @@ public class OrdenacaoTopologica
 	}
 
 	public void insereInicio(int elemento){
-
 		Elo p = new Elo();
 		p.chave = elemento;
-		if(prim == null){
-			prim = p;
-		}
-		else{
-			prim.prox = prim;
-			prim = p;
-		}
-	}
+        if (prim != null) {
+            prim.prox = prim;
+        }
+        prim = p;
+    }
 
 	public void insereFim(int elemento){
 		Elo q = new Elo();
@@ -122,6 +137,29 @@ public class OrdenacaoTopologica
 			p.prox = q;
 			this.n++;
 		}
+	}
+
+	public boolean remove(int elem)
+	{
+
+		Elo p;
+		Elo ant = null;
+
+		for( p = prim; ((p != null) && (p.chave != elem)); p = p.prox)
+			ant = p;
+
+
+		if (p == null)
+			return false;
+
+		if (p == prim)
+			prim = prim.prox;
+		else
+			ant.prox = p.prox;
+
+		p = null;
+
+		return true;
 	}
 	
 	/* Método responsável pela leitura do arquivo de entrada. */
@@ -162,7 +200,62 @@ public class OrdenacaoTopologica
 			System.out.println("Arquivo não encontrado!");
 		}
 	}
-	
+
+    private void gerarListaSemPredecessores(){
+        Elo p = prim;
+        Elo q = new Elo();
+        prim = null;
+		n = 0;
+        while(p != null){
+            q = p;
+            p = q.prox;
+            if(q.contador == 0){
+                q.prox = prim;
+                prim = q;
+				n++;
+            }
+        }
+    }
+
+    private void gerarSequenciaDeSaida(){
+		Elo q = prim;
+		while (q != null){
+			System.out.print(q.chave + " ");
+			n--;
+			EloSuc t = q.listaSuc;
+			while (t != null){
+				t.id.contador--;
+				if(t.id.contador == 0){
+					Elo novoElo = new Elo(t.id.chave, 0, null, t.id.listaSuc);
+					insereFim(novoElo);
+					t = t.remove(t, t.id.chave);
+				}
+				else {
+					t = t.prox;
+				}
+			}
+			remove(q.chave);
+			q = q.prox;
+		}
+		System.out.println();
+    }
+
+
+	public void insereFim(Elo q){
+		if(prim == null){
+			prim = q;
+		}
+		else{
+			Elo p = prim;
+			while(p.prox != null){
+				p = p.prox;
+			}
+			p.prox = q;
+			this.n++;
+		}
+	}
+
+
 	/* Método para impressão do estado atual da estrutura de dados. */
 	private void debug()
 	{
@@ -188,7 +281,13 @@ public class OrdenacaoTopologica
 	/* Método responsável por executar o algoritmo. */
 	public boolean executa()
 	{
+
 		debug();
+		gerarListaSemPredecessores();
+		debug();
+		gerarSequenciaDeSaida();
+//		debug();
+
 		return true;
 	}
 }

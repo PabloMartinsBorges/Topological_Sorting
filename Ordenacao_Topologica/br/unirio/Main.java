@@ -10,7 +10,9 @@ public class Main
 
 		ord.realizaLeitura(nomeEntrada);
 
-		if(!ord.executa())
+//		GrafoRandomico grafoRandomico = new GrafoRandomico(5);
+
+		if(ord.executa())
 			System.out.println("O conjunto nao é parcialmente ordenado.");
 		else
 			System.out.println("O conjunto é parcialmente ordenado.");
