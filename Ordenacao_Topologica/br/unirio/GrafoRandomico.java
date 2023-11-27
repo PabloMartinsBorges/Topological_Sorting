@@ -1,72 +1,78 @@
 package br.unirio;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class GrafoRandomico {
-    public int vertices;
-    public int edges;
 
+    private int vertices;
+    private float probabilidade;
+    private boolean[][] matrixAdjacencia;
 
+    public GrafoRandomico() {
 
-    Random random = new Random();
-    // An adjacency list to represent a graph
-    public OrdenacaoTopologica lista;
+        this.vertices = 20;
+        this.probabilidade = (float) Math.random();
 
-    // Creating the constructor
-    public GrafoRandomico(int vertices)  {
+        System.out.println("A probabilidade de haver uma aresta entre dois vértices é: " + probabilidade);
 
-        // Set a maximum limit for the
-        // number of vertices say 20
-        this.vertices = vertices;
+        matrixAdjacencia = new boolean[vertices][vertices];
 
-        // compute the maximum possible number of edges
-        // and randomly choose the number of edges less than
-        // or equal to the maximum number of possible edges
-        this.edges = (vertices * (vertices - 1)) / 2;
+        for (int i = 0; i < vertices; i++) {
+            for (int j = i + 1; j < vertices; j++) {
 
-        // Creating an adjacency list
-        // representation for the random graph
-        lista = new OrdenacaoTopologica();
-        String[] grafoString = new String[edges];
+                float probabilidadeAresta = (float) Math.random();
 
-        // A for loop to randomly generate edges
-        for (int i = 0; i < edges; i++) {
-            // Randomly select two vertices to
-            // create an edge between them
-            int v = random.nextInt(vertices);
-            int w = random.nextInt(vertices);
-
-            String novaAresta = v + " < " + w;
-
-            boolean contemAresta = false;
-
-            for(String aresta : grafoString){
-                if(aresta == novaAresta){
-                    contemAresta = true;
-                    break;
+                if (probabilidadeAresta < probabilidade && !formaCiclo(i, j)) {
+                    addAresta(i, j);
                 }
             }
-
-            // Check if there is already an edge between v
-            // and w
-            if ((v == w) || contemAresta) {
-                // Reduce the value of i
-                // so that again v and w can be chosen
-                // for the same edge count
-                i = i - 1;
-                continue;
-            }
-            else {
-                grafoString[i] = novaAresta;
-            }
-
         }
 
-        for(String arestas : grafoString){
-            System.out.println(arestas);
-        }
-
+        salvaGrafo();
     }
 
+    private void addAresta(int v, int w) {
+        matrixAdjacencia[v][w] = true;
+    }
+
+    private boolean formaCiclo(int v, int w) {
+        boolean[] visitado = new boolean[vertices];
+        return dfs(v, w, visitado);
+    }
+
+    private boolean dfs(int atual, int alvo, boolean[] visitado) {
+        if (visitado[atual]) {
+            return atual == alvo;
+        }
+
+        visitado[atual] = true;
+
+        for (int i = 0; i < vertices; i++) {
+            if (matrixAdjacencia[atual][i]) {
+                if (dfs(i, alvo, visitado)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    // Método para salvar o grafo em um arquivo
+    private void salvaGrafo() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Ordenacao_Topologica/entrada.txt"))) {
+            for (int i = 0; i < vertices; i++) {
+                for (int j = 0; j < vertices; j++) {
+                    if (matrixAdjacencia[i][j]) {
+                        writer.write(i + " < " + j);
+                        writer.newLine();
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

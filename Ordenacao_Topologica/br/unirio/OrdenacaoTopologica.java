@@ -55,13 +55,11 @@ public class OrdenacaoTopologica
 			this.prox = prox;
 		}
 
-		public void insereInicio(Elo elemento){
-            if (id != null) {
-                EloSuc eloTemp = new EloSuc();
-                eloTemp.id = id;
-                this.prox = eloTemp;
-            }
-            id = elemento;
+		public EloSuc insereInicio(EloSuc atual, Elo elemento){
+		   EloSuc novoElo = new EloSuc();
+		   novoElo.id = elemento;
+		   novoElo.prox = atual;
+		   return novoElo;
         }
 		public EloSuc remove(EloSuc eloSuc, int elem )
 		{
@@ -114,15 +112,6 @@ public class OrdenacaoTopologica
 
 	}
 
-	public void insereInicio(int elemento){
-		Elo p = new Elo();
-		p.chave = elemento;
-        if (prim != null) {
-            prim.prox = prim;
-        }
-        prim = p;
-    }
-
 	public void insereFim(int elemento){
 		Elo q = new Elo();
 		q.chave = elemento;
@@ -135,7 +124,6 @@ public class OrdenacaoTopologica
 				p = p.prox;
 			}
 			p.prox = q;
-
 		}
 		this.n++;
 	}
@@ -190,7 +178,7 @@ public class OrdenacaoTopologica
 					eloX.listaSuc = novoSuc;
 				}
 				else{
-					eloX.listaSuc.insereInicio(eloY);
+					eloX.listaSuc = eloX.listaSuc.insereInicio(eloX.listaSuc, eloY);
 				}
 				eloY.contador++;
 			}
@@ -279,12 +267,13 @@ public class OrdenacaoTopologica
 	/* Método responsável por executar o algoritmo. */
 	public boolean executa()
 	{
+		realizaLeitura("Ordenacao_Topologica/entrada.txt");
 		debug();
 		gerarListaSemPredecessores();
 		debug();
 		gerarSequenciaDeSaida();
 		if(n != 0){
-			System.out.println(n);
+			System.out.println(n + " //");
 			return false;
 		}
 		debug();
