@@ -33,6 +33,36 @@ public class OrdenacaoTopologica
 			this.prox = prox;
 			this.listaSuc = listaSuc;
 		}
+
+		protected void insereSucInicio( Elo elemento ){
+			EloSuc novoElo = new EloSuc();
+			novoElo.id = elemento;
+			novoElo.prox = listaSuc;
+			listaSuc = novoElo;
+		}
+
+		protected boolean removeSuc( int elem )
+		{
+
+			EloSuc p;
+			EloSuc ant = null;
+
+			for( p = listaSuc; ((p.id != null) && (p.id.chave != elem)); p = p.prox)
+				ant = p;
+
+
+			if (p.id == null)
+				return false;
+
+			if (p.id == listaSuc.id)
+				listaSuc = p.prox;
+			else
+				ant.prox = p.prox;
+
+
+
+			return true;
+		}
 	}
 	
 	private class EloSuc
@@ -55,34 +85,7 @@ public class OrdenacaoTopologica
 			this.prox = prox;
 		}
 
-		public EloSuc insereInicio(EloSuc atual, Elo elemento){
-		   EloSuc novoElo = new EloSuc();
-		   novoElo.id = elemento;
-		   novoElo.prox = atual;
-		   return novoElo;
-        }
-		public EloSuc remove(EloSuc eloSuc, int elem )
-		{
 
-			EloSuc p;
-			EloSuc ant = null;
-
-			for( p = eloSuc; ((p.id != null) && (p.id.chave != elem)); p = p.prox)
-				ant = p;
-
-
-			if (p.id == null)
-				return null;
-
-			if (p.id == eloSuc.id)
-				eloSuc = p.prox;
-			else
-				ant.prox = p.prox;
-
-
-
-			return eloSuc;
-		}
 	}
 
 
@@ -150,6 +153,69 @@ public class OrdenacaoTopologica
 
 		return true;
 	}
+
+	public void adicionarAresta(int x, int y){
+		if(busca(x) == null){
+			insereFim(x);
+		}
+		if(busca(y) == null){
+			insereFim(y);
+		}
+		Elo eloX = busca(x);
+		Elo eloY = busca(y);
+		if(eloX.listaSuc == null){
+			EloSuc novoSuc = new EloSuc();
+			novoSuc.id = eloY;
+			eloX.listaSuc = novoSuc;
+		}
+		else{
+			eloX.insereSucInicio(eloY);
+		}
+		eloY.contador++;
+	}
+
+	private boolean geraCiclo(int visitado, int buscado, boolean visitados[], boolean temCiclo ){
+
+		if(buscado == visitado){
+
+			return true;
+		}
+		Elo eloVisitado = busca(visitado);
+		Elo eloBuscado = busca(buscado);
+		if(eloVisitado == null || eloBuscado == null){
+			return false;
+		}
+		visitados[eloVisitado.chave] = true;
+		if(!temCiclo ){
+			EloSuc eloSucTemp = eloVisitado.listaSuc;
+			while (eloSucTemp != null){
+				if(!visitados[eloSucTemp.id.chave]){
+					temCiclo = geraCiclo(eloSucTemp.id.chave, buscado, visitados, false);
+					if(temCiclo){
+						break;
+					}
+				}
+				eloSucTemp = eloSucTemp.prox;
+			}
+		}
+		visitados[eloVisitado.chave] = false;
+		return temCiclo;
+	}
+
+	protected boolean geraCiclo( int eloVisitado, int eloBuscado, int v ){
+
+		boolean[] visitados = new boolean[v];
+		return geraCiclo(eloVisitado, eloBuscado, visitados, false);
+	}
+
+	protected boolean geraCiclo( int eloVisitado, int eloBuscado ){
+
+		boolean[] visitados = new boolean[n*(n-1)/2];
+		return geraCiclo(eloVisitado, eloBuscado, visitados, false);
+	}
+
+
+
 	
 	/* Método responsável pela leitura do arquivo de entrada. */
 	public void realizaLeitura(String nomeEntrada){
@@ -164,23 +230,9 @@ public class OrdenacaoTopologica
 				int elemX = Integer.parseInt(entrada[0]);
 				int elemY = Integer.parseInt(entrada[1]);
 
-				if(busca(elemX) == null){
-					insereFim(elemX);
-				}
-				if(busca(elemY) == null){
-					insereFim(elemY);
-				}
-				Elo eloX = busca(elemX);
-				Elo eloY = busca(elemY);
-				if(eloX.listaSuc == null){
-					EloSuc novoSuc = new EloSuc();
-					novoSuc.id = eloY;
-					eloX.listaSuc = novoSuc;
-				}
-				else{
-					eloX.listaSuc = eloX.listaSuc.insereInicio(eloX.listaSuc, eloY);
-				}
-				eloY.contador++;
+				if(!geraCiclo(elemY, elemX ))
+					adicionarAresta(elemX, elemY);
+
 			}
 
 
@@ -215,7 +267,7 @@ public class OrdenacaoTopologica
 				if(t.id.contador == 0){
 					Elo novoElo = new Elo(t.id.chave, 0, null, t.id.listaSuc);
 					insereFim(novoElo);
-					t = t.remove(t, t.id.chave);
+					q.removeSuc(t.id.chave);
 				}
 				else {
 					t = t.prox;
@@ -267,7 +319,8 @@ public class OrdenacaoTopologica
 	/* Método responsável por executar o algoritmo. */
 	public boolean executa()
 	{
-		realizaLeitura("Ordenacao_Topologica/entrada.txt");
+//		realizaLeitura("Ordenacao_Topologica/entrada.txt");
+		System.out.println();
 		debug();
 		gerarListaSemPredecessores();
 		debug();
