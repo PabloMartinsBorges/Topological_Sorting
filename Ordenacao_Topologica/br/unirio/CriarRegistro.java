@@ -13,22 +13,21 @@ public class CriarRegistro {
 	private String url;
 	
 	public CriarRegistro() {
-		url = "registroTopological.csv";
+		url = "Ordenacao_Topologica/registroTopologico.csv";
 	}
 	
 	public CriarRegistro(String endereco) {
-		
 		url = endereco;
 	}
 
-    public void RegistrarTempo(int nVertices, double tempoNano, double tempoSeg) {
+    public void RegistrarTempo(int nVertices, long tempoMili, long tempoSeg) {
         CriarArquivo(url);
 
         try {
             List<String> existentes = LinhaExistentes(url);
-            String coluna = "Numero de Grafos" + ";" + "Tempo Medio (nano) "+ ";" + "Tempo Medio (seg) "+ ";";
+            String coluna = "Numero de Grafos" + ";" + "Tempo Medio (milissegundos) "+ ";" + "Tempo Medio (seg) "+ ";";
             existentes.add(coluna);
-            String registro = nVertices + ";" + tempoNano + ";" + tempoSeg + ";";
+            String registro = nVertices + ";" + tempoMili + ";" + tempoSeg + ";";
             existentes.add(registro);
             // adicionar no csv
             String todasLinhas = UnicaLinha(existentes);
@@ -42,7 +41,7 @@ public class CriarRegistro {
     }
     
     
-    public void RegistrarTempo(int nVertices, double tempo) {
+    public void RegistrarTempo(int nVertices, long tempo) {
         CriarArquivo(url);
 
         try {
