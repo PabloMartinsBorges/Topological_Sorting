@@ -163,21 +163,13 @@ public class OrdenacaoTopologica
 		}
 		Elo eloX = busca(x);
 		Elo eloY = busca(y);
-		if(eloX.listaSuc == null){
-			EloSuc novoSuc = new EloSuc();
-			novoSuc.id = eloY;
-			eloX.listaSuc = novoSuc;
-		}
-		else{
-			eloX.insereSucInicio(eloY);
-		}
+		eloX.insereSucInicio(eloY);
 		eloY.contador++;
 	}
 
 	private boolean geraCiclo(int visitado, int buscado, boolean visitados[], boolean temCiclo ){
 
 		if(buscado == visitado){
-
 			return true;
 		}
 		Elo eloVisitado = busca(visitado);
@@ -203,14 +195,12 @@ public class OrdenacaoTopologica
 	}
 
 	protected boolean geraCiclo( int eloVisitado, int eloBuscado, int v ){
-
 		boolean[] visitados = new boolean[v];
 		return geraCiclo(eloVisitado, eloBuscado, visitados, false);
 	}
 
 	protected boolean geraCiclo( int eloVisitado, int eloBuscado ){
-
-		boolean[] visitados = new boolean[n*(n-1)/2];
+		boolean[] visitados = new boolean[Math.max(eloBuscado, eloVisitado)];
 		return geraCiclo(eloVisitado, eloBuscado, visitados, false);
 	}
 
@@ -319,19 +309,13 @@ public class OrdenacaoTopologica
 	/* Método responsável por executar o algoritmo. */
 	public boolean executa()
 	{
-//		realizaLeitura("Ordenacao_Topologica/entrada.txt");
-		System.out.println();
-		debug();
+//		realizaLeitura("Ordenacao_Topologica/entrada1.txt");
 		gerarListaSemPredecessores();
-		debug();
 		gerarSequenciaDeSaida();
 		if(n != 0){
 			System.out.println(n + " //");
 			return false;
 		}
-		debug();
-
-
 
 		return true;
 	}
