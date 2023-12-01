@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class OrdenacaoTopologica
 {
-	private class Elo
+	protected class Elo
 	{
 		/* Identificação do elemento. */
 		public int chave;
@@ -63,9 +63,20 @@ public class OrdenacaoTopologica
 
 			return true;
 		}
+
+		protected boolean buscaSuc(int elem){
+			if(listaSuc == null)
+				return false;
+			for(EloSuc p = listaSuc; p != null; p = p.prox){
+				if(p.id.chave == elem){
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 	
-	private class EloSuc
+	protected  class EloSuc
 	{
 		/* Aponta para o elo que é sucessor. */
 		public Elo id;
@@ -204,7 +215,14 @@ public class OrdenacaoTopologica
 		return geraCiclo(eloVisitado, eloBuscado, visitados, false);
 	}
 
-
+	protected boolean geraArestaDupla(int vertice, int verticeAlvo){
+		Elo eloVertice = busca(vertice);
+		Elo eloVerticeAlvo = busca(verticeAlvo);
+		if(eloVerticeAlvo == null || eloVertice == null ){
+			return false;
+		}
+		return eloVertice.buscaSuc(verticeAlvo);
+	}
 
 	
 	/* Método responsável pela leitura do arquivo de entrada. */
