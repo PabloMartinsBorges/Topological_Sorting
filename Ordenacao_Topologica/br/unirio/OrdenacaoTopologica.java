@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
 
-public class OrdenacaoTopologica implements Cloneable {
+public class OrdenacaoTopologica  {
 
     protected class Elo {
         /* Identificação do elemento. */
