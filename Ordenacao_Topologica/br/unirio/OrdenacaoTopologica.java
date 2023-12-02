@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class OrdenacaoTopologica
 {
-	private class Elo
+	protected class Elo
 	{
 		/* Identificação do elemento. */
 		public int chave;
@@ -63,9 +63,20 @@ public class OrdenacaoTopologica
 
 			return true;
 		}
+
+		protected boolean buscaSuc(int elem){
+			if(listaSuc == null)
+				return false;
+			for(EloSuc p = listaSuc; p != null; p = p.prox){
+				if(p.id.chave == elem){
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 	
-	private class EloSuc
+	protected  class EloSuc
 	{
 		/* Aponta para o elo que é sucessor. */
 		public Elo id;
@@ -167,22 +178,17 @@ public class OrdenacaoTopologica
 		eloY.contador++;
 	}
 
-	private boolean geraCiclo(int visitado, int buscado, boolean visitados[], boolean temCiclo ){
+	private boolean geraCiclo(Elo eloV, Elo eloA, boolean[] visitados, boolean temCiclo ){
 
-		if(buscado == visitado){
+		if(eloA == eloV ){
 			return true;
 		}
-		Elo eloVisitado = busca(visitado);
-		Elo eloBuscado = busca(buscado);
-		if(eloVisitado == null || eloBuscado == null){
-			return false;
-		}
-		visitados[eloVisitado.chave] = true;
+		visitados[eloA.chave] = true;
 		if(!temCiclo ){
-			EloSuc eloSucTemp = eloVisitado.listaSuc;
+			EloSuc eloSucTemp = eloA.listaSuc;
 			while (eloSucTemp != null){
 				if(!visitados[eloSucTemp.id.chave]){
-					temCiclo = geraCiclo(eloSucTemp.id.chave, buscado, visitados, false);
+					temCiclo = geraCiclo(eloV, eloSucTemp.id, visitados, false);
 					if(temCiclo){
 						break;
 					}
@@ -190,21 +196,31 @@ public class OrdenacaoTopologica
 				eloSucTemp = eloSucTemp.prox;
 			}
 		}
-		visitados[eloVisitado.chave] = false;
 		return temCiclo;
 	}
 
-	protected boolean geraCiclo( int eloVisitado, int eloBuscado, int v ){
+	protected boolean geraCiclo( Elo eloV, Elo eloA, int v ){
 		boolean[] visitados = new boolean[v];
-		return geraCiclo(eloVisitado, eloBuscado, visitados, false);
+		return geraCiclo(eloV, eloA, visitados, false);
 	}
 
-	protected boolean geraCiclo( int eloVisitado, int eloBuscado ){
-		boolean[] visitados = new boolean[Math.max(eloBuscado, eloVisitado)];
-		return geraCiclo(eloVisitado, eloBuscado, visitados, false);
+	protected boolean geraCiclo( Elo eloV, Elo eloA){
+		boolean[] visitados = new boolean[Math.max(eloV.chave, eloA.chave)];
+		return geraCiclo(eloV, eloA, visitados, false);
 	}
 
+	protected boolean geraArestaDupla(Elo eloV, Elo eloA){
+		return eloV.buscaSuc(eloA.chave);
+	}
 
+	protected boolean geraArestaPossivel(int v, int a, int numVertices){
+		Elo eloV = busca(v);
+		Elo eloA = busca(a);
+		if(eloV == null ||eloA == null){
+			return true;
+		}
+		return !geraArestaDupla(eloV, eloA) && !geraCiclo(eloV, eloA, numVertices);
+	}
 
 	
 	/* Método responsável pela leitura do arquivo de entrada. */
@@ -219,8 +235,7 @@ public class OrdenacaoTopologica
 				String[] entrada = scanner.nextLine().replace(" ", "").split("<");
 				int elemX = Integer.parseInt(entrada[0]);
 				int elemY = Integer.parseInt(entrada[1]);
-
-				if(!geraCiclo(elemY, elemX ))
+				if(!geraCiclo(busca(elemX), busca(elemY) ))
 					adicionarAresta(elemX, elemY);
 
 			}
@@ -250,8 +265,8 @@ public class OrdenacaoTopologica
 		Elo q = prim;
 		while (q != null){
 			System.out.print(q.chave + " ");
-			EloSuc t = q.listaSuc;
 			n--;
+			EloSuc t = q.listaSuc;
 			while (t != null){
 				t.id.contador--;
 				if(t.id.contador == 0){
@@ -311,6 +326,7 @@ public class OrdenacaoTopologica
 	{
 //		realizaLeitura("Ordenacao_Topologica/entrada1.txt");
 		gerarListaSemPredecessores();
+		debug();
 		gerarSequenciaDeSaida();
 		if(n != 0){
 			System.out.println(n + " //");
