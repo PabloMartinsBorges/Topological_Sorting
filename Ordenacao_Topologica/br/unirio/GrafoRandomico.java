@@ -18,11 +18,11 @@ public class GrafoRandomico {
         for(int i = 0; i < numArestas; i++){
             int v = random.nextInt(numVertices);
             int a = random.nextInt(numVertices);
-            if(v == a || listaAdjacencia.geraCiclo(a, v, numVertices) || listaAdjacencia.geraArestaDupla(v, a)){
+            if(v == a || !listaAdjacencia.geraArestaPossivel(v, a, numVertices)){
                 i--;
-                continue;
             }
-            listaAdjacencia.adicionarAresta(v, a);
+            else
+                listaAdjacencia.adicionarAresta(v, a);
 
         }
 
