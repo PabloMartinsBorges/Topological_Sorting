@@ -9,23 +9,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CriarRegistro {
-	
-	private String url;
-	
-	public CriarRegistro() {
-		url = "Ordenacao_Topologica/registroTopologico.csv";
-	}
-	
-	public CriarRegistro(String endereco) {
-		url = endereco;
-	}
+
+    private String url;
+
+    public CriarRegistro() {
+        url = "Ordenacao_Topologica/registroTopologico.csv";
+    }
+
+    public CriarRegistro(String endereco) {
+        url = endereco;
+    }
 
     public void RegistrarTempo(int nVertices, long tempoMili, long tempoSeg) {
         CriarArquivo(url);
 
         try {
             List<String> existentes = LinhaExistentes(url);
-            String coluna = "Numero de Grafos" + ";" + "Tempo Medio (milissegundos) "+ ";" + "Tempo Medio (seg) "+ ";";
+            String coluna = "Numero de Grafos" + ";" + "Tempo Medio (milissegundos) " + ";" + "Tempo Medio (seg) " + ";";
             existentes.add(coluna);
             String registro = nVertices + ";" + tempoMili + ";" + tempoSeg + ";";
             existentes.add(registro);
@@ -39,14 +39,14 @@ public class CriarRegistro {
             System.out.println("Erro ao gerar o arquivo " + url);
         }
     }
-    
-    
+
+
     public void RegistrarTempo(int nVertices, long tempo) {
         CriarArquivo(url);
 
         try {
             List<String> existentes = LinhaExistentes(url);
-            String coluna = "Numero de Grafos" + ";" + "Tempo"+ ";";
+            String coluna = "Numero de Grafos" + ";" + "Tempo" + ";";
             existentes.add(coluna);
             String registro = nVertices + ";" + tempo + ";";
             existentes.add(registro);
@@ -93,8 +93,8 @@ public class CriarRegistro {
 
         return result;
     }
-    
-    
+
+
     public List<String> LinhaExistentes(String caminho) {
 
         List<String> result = new ArrayList<String>();
