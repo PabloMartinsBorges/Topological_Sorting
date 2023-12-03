@@ -3,7 +3,7 @@ package br.unirio;
 public class Main {
     public static void main(String args[]) {
 
-        int[] numVertices = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 500, 1000};
+        int[] numVertices = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 500, 1000, 5000, 10000, 20000, 30000, 50000, 100000};
 
         GrafoRandomico[] grafos = new GrafoRandomico[numVertices.length];
 
@@ -35,8 +35,9 @@ public class Main {
 
                 mediaTempo += tempoProcessamento;
             }
-            mediaTempo = mediaTempo / 10;
-            registro.RegistrarTempo(numVertices[i], mediaTempo, mediaTempo / 1000);
+            mediaTempo = mediaTempo/10;
+            double mediaTempoFrac = (double) mediaTempo / 10;
+            registro.RegistrarTempo(numVertices[i], mediaTempoFrac, mediaTempo / 1000);
         }
     }
 }

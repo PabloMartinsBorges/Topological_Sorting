@@ -20,7 +20,7 @@ public class CriarRegistro {
         url = endereco;
     }
 
-    public void RegistrarTempo(int nVertices, long tempoMili, long tempoSeg) {
+    public void RegistrarTempo(int nVertices, double tempoMili, long tempoSeg) {
         CriarArquivo(url);
 
         try {

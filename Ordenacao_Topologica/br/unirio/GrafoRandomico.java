@@ -14,7 +14,10 @@ public class GrafoRandomico implements Cloneable {
         this.numVertices = numVertices;
         this.numArestas = calculaQuantidadeAresta();
         this.listaAdjacencia = new OrdenacaoTopologica();
+        gerarArestasAleatorias();
+    }
 
+    public void gerarArestasAleatorias(){
         for (int i = 0; i < numArestas; i++) {
             int v = random.nextInt(numVertices);
             int a = random.nextInt(numVertices);
@@ -24,14 +27,12 @@ public class GrafoRandomico implements Cloneable {
                 listaAdjacencia.adicionarAresta(v, a);
 
         }
-
-
     }
 
     private int calculaQuantidadeAresta() {
-        int max = (numVertices * (numVertices - 1)) / 2;
+        double max = ((numVertices * (numVertices - 1)) / 2);
         int min = numVertices;
-        int intervalo = max - min + 1;
+        double intervalo = max - min + 1;
         return (int) (Math.random() * intervalo) + min;
     }
 
@@ -43,11 +44,10 @@ public class GrafoRandomico implements Cloneable {
     public GrafoRandomico clone() {
         try {
             GrafoRandomico clone = (GrafoRandomico) super.clone();
-            clone.listaAdjacencia = this.listaAdjacencia.reconstroi(); // Deep clone OrdenacaoTopologica
-            // Additional deep cloning if needed
+            clone.listaAdjacencia = this.listaAdjacencia.reconstroi();
             return clone;
         } catch (CloneNotSupportedException e) {
-            throw new AssertionError();  // This should never happen
+            throw new AssertionError();
         }
     }
 
