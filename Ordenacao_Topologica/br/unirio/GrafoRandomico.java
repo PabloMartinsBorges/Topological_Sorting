@@ -17,21 +17,28 @@ public class GrafoRandomico implements Cloneable {
         gerarArestasAleatorias();
     }
 
+
     public void gerarArestasAleatorias(){
-        for (int i = 0; i < numArestas; i++) {
-            int v = random.nextInt(numVertices);
+        int v = 0;
+        for (int i = 0; i < numArestas ; i++) {
+
+            if(v == numVertices){
+                v = 0;
+            }
             int a = random.nextInt(numVertices);
+
             if (v == a || !listaAdjacencia.geraArestaPossivel(v, a, numVertices)) {
                 i--;
-            } else
+            } else {
                 listaAdjacencia.adicionarAresta(v, a);
-
+            }
+            v++;
         }
     }
 
     private int calculaQuantidadeAresta() {
-        double max = ((numVertices * (numVertices - 1)) / 2);
         int min = numVertices;
+        double max = (((numVertices * (numVertices - 1)) / 2)  * 0.01) + min;
         double intervalo = max - min + 1;
         return (int) (Math.random() * intervalo) + min;
     }

@@ -3,7 +3,7 @@ package br.unirio;
 public class Main {
     public static void main(String args[]) {
 
-        int[] numVertices = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 500, 1000, 5000, 10000, 20000, 30000, 50000, 100000};
+        int[] numVertices = { 30000, 50000, 100000};
 
         GrafoRandomico[] grafos = new GrafoRandomico[numVertices.length];
 

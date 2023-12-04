@@ -95,7 +95,7 @@ public class OrdenacaoTopologica  {
     protected Elo prim;
 
     /* Número de elementos na lista. */
-    private int n;
+    protected int n;
 
     public OrdenacaoTopologica() {
         prim = null;
@@ -300,7 +300,6 @@ public class OrdenacaoTopologica  {
     /* Método responsável por executar o algoritmo. */
     public boolean executa() {
 //		realizaLeitura("Ordenacao_Topologica/entrada1.txt");
-
         gerarListaSemPredecessores();
         gerarSequenciaDeSaida();
         if (n != 0) {
@@ -314,6 +313,7 @@ public class OrdenacaoTopologica  {
     protected OrdenacaoTopologica reconstroi() {
         OrdenacaoTopologica novaLista = new OrdenacaoTopologica();
         Elo p = prim;
+        novaLista.insereFim(p.chave);
         while (p != null) {
             EloSuc suc = p.listaSuc;
             while (suc != null) {
@@ -324,6 +324,8 @@ public class OrdenacaoTopologica  {
         }
         return novaLista;
     }
+
+
 
 
 }
