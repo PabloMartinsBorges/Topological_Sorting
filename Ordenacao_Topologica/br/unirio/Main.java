@@ -3,13 +3,13 @@ package br.unirio;
 public class Main {
     public static void main(String args[]) {
 
-        int[] numVertices = { 30000, 50000, 100000};
+        int[] numVertices = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 500, 1000, 5000, 10000, 20000, 30000};
 
         GrafoRandomico[] grafos = new GrafoRandomico[numVertices.length];
 
         for (int i = 0; i < grafos.length; i++) {
             grafos[i] = new GrafoRandomico(numVertices[i]);
-            System.out.println("Grafo com " + numVertices[i] + " número de vértices criado!");
+            System.out.println("Grafo com " + numVertices[i] + " número de vértices criado, com " + grafos[i].getNumArestas() + " Arestas!");
         }
 
         CriarRegistro registro = new CriarRegistro("Ordenacao_Topologica/registroTopologico.csv");
@@ -35,9 +35,8 @@ public class Main {
 
                 mediaTempo += tempoProcessamento;
             }
-            mediaTempo = mediaTempo/10;
             double mediaTempoFrac = (double) mediaTempo / 10;
-            registro.RegistrarTempo(numVertices[i], mediaTempoFrac, mediaTempo / 1000);
+            registro.RegistrarTempo(numVertices[i], mediaTempoFrac, grafos[i].getNumArestas());
         }
     }
 }

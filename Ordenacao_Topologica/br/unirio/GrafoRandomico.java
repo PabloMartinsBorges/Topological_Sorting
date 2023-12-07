@@ -20,7 +20,7 @@ public class GrafoRandomico implements Cloneable {
 
     public void gerarArestasAleatorias(){
         int v = 0;
-        for (int i = 0; i < numArestas ; i++) {
+        for (int i = 0; i < numArestas; i++) {
 
             if(v == numVertices){
                 v = 0;
@@ -38,7 +38,7 @@ public class GrafoRandomico implements Cloneable {
 
     private int calculaQuantidadeAresta() {
         int min = numVertices;
-        double max = (((numVertices * (numVertices - 1)) / 2)  * 0.01) + min;
+        double max = (double) numVertices * (numVertices - 1) * 0.5 * 0.1 + min;
         double intervalo = max - min + 1;
         return (int) (Math.random() * intervalo) + min;
     }
@@ -58,5 +58,7 @@ public class GrafoRandomico implements Cloneable {
         }
     }
 
-
+    public int getNumArestas() {
+        return numArestas;
+    }
 }
